@@ -208,8 +208,8 @@ fn main() -> Result<()> {
     unsafe {
         gl.enable(glow::DEPTH_TEST);
         gl.front_face(glow::CCW);
-        gl.cull_face(glow::BACK);
-        gl.enable(glow::CULL_FACE);
+        // Backface culling can hide all geometry if winding is inverted.
+        // Keep it off by default for robustness; can be re-enabled once winding is confirmed.
         gl.clear_color(0.529, 0.808, 0.922, 0.0);
         gl.enable(glow::MULTISAMPLE);
         gl.viewport(0, 0, WINDOW_WIDTH as i32, WINDOW_HEIGHT as i32);
@@ -414,18 +414,8 @@ fn main() -> Result<()> {
                 for (chunk_pos, cmds) in &per_chunk_cmds {
                     for face in 0..6 {
                         if let Some(cmd) = cmds[face] {
-                            let visible = match face {
-                                0 => camera_chunk_pos.y >= chunk_pos.y,
-                                1 => camera_chunk_pos.y <= chunk_pos.y,
-                                2 => camera_chunk_pos.x >= chunk_pos.x,
-                                3 => camera_chunk_pos.x <= chunk_pos.x,
-                                4 => camera_chunk_pos.z >= chunk_pos.z,
-                                5 => camera_chunk_pos.z <= chunk_pos.z,
-                                _ => true,
-                            };
-                            if visible {
-                                renderer.add_draw_command(cmd);
-                            }
+                            let _ = (camera_chunk_pos, chunk_pos);
+                            renderer.add_draw_command(cmd);
                         }
                     }
                 }
