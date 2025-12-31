@@ -1,8 +1,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$RepoName,
+    [string]$RemoteName = 'origin',
     [switch]$Private,
-    [switch]$ForceSetOrigin,
+    [switch]$ForceSetRemote,
     [string]$DotEnvPath = (Join-Path (Get-Location) '.env')
 )
 
@@ -45,28 +46,28 @@ try {
 
 $remoteUrl = $repo.clone_url
 
-# Set origin
-$hasOrigin = $false
+# Set remote
+$hasRemote = $false
 try {
-    git remote get-url origin | Out-Null
-    $hasOrigin = $true
+    git remote get-url $RemoteName | Out-Null
+    $hasRemote = $true
 } catch { }
 
-if ($hasOrigin -and -not $ForceSetOrigin) {
-    $existing = (git remote get-url origin).Trim()
+if ($hasRemote -and -not $ForceSetRemote) {
+    $existing = (git remote get-url $RemoteName).Trim()
     if ($existing -ne $remoteUrl) {
-        throw "Origin already exists and differs. Re-run with -ForceSetOrigin to overwrite. Existing: $existing"
+        throw "Remote '$RemoteName' already exists and differs. Re-run with -ForceSetRemote to overwrite. Existing: $existing"
     }
 } else {
-    if ($hasOrigin) {
-        git remote remove origin | Out-Null
+    if ($hasRemote) {
+        git remote remove $RemoteName | Out-Null
     }
-    git remote add origin $remoteUrl | Out-Null
+    git remote add $RemoteName $remoteUrl | Out-Null
 }
 
 # Push using Basic auth header derived from .env token
 $basic = Get-GitBasicAuthHeaderValue -Login $owner -Token $token
 
-git -c "http.extraHeader=AUTHORIZATION: $basic" push -u origin $branch
+git -c "http.extraHeader=AUTHORIZATION: $basic" push -u $RemoteName $branch
 
 git remote -v
