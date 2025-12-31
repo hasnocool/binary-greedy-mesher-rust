@@ -36,7 +36,12 @@ $body = @{ name = $RepoName; private = [bool]$Private } | ConvertTo-Json
 try {
     $repo = Invoke-RestMethod -Method Post -Headers $headers -Uri 'https://api.github.com/user/repos' -Body $body
 } catch {
-    $status = $_.Exception.Response.StatusCode.Value__
+    $resp = $_.Exception.Response
+    if (-not $resp) {
+        throw "GitHub API call failed (no HTTP response). $($_.Exception.Message)"
+    }
+
+    $status = $resp.StatusCode.Value__
     if ($status -eq 422) {
         $repo = Invoke-RestMethod -Method Get -Headers $headers -Uri "https://api.github.com/repos/$owner/$RepoName"
     } else {
@@ -47,14 +52,14 @@ try {
 $remoteUrl = $repo.clone_url
 
 # Set remote
-$hasRemote = $false
-try {
-    git remote get-url $RemoteName | Out-Null
-    $hasRemote = $true
-} catch { }
+$remoteList = (& git remote) | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+$hasRemote = $remoteList -contains $RemoteName
+$existing = ''
+if ($hasRemote) {
+    $existing = ((& git remote get-url $RemoteName) | Out-String).Trim()
+}
 
 if ($hasRemote -and -not $ForceSetRemote) {
-    $existing = (git remote get-url $RemoteName).Trim()
     if ($existing -ne $remoteUrl) {
         throw "Remote '$RemoteName' already exists and differs. Re-run with -ForceSetRemote to overwrite. Existing: $existing"
     }
