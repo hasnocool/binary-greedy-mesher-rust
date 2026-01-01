@@ -7,6 +7,15 @@ edition = "2024"
 name = "mapgen_view"
 path = "src/bin/mapgen_view.rs"
 
+[[bin]]
+name = "bevy_sky_view"
+path = "src/bin/bevy_sky_view.rs"
+required-features = ["bevy_view"]
+
+[features]
+# Opt-in Bevy viewer showcasing bevy_sky_gradient.
+bevy_view = ["dep:bevy", "dep:bevy_sky_gradient"]
+
 [dependencies]
 anyhow = "1"
 bytemuck = { version = "1", features = ["derive"] }
@@ -21,3 +30,7 @@ winit = "0.30"
 glutin = "0.32"
 glutin-winit = "0.5"
 raw-window-handle = "0.6"
+
+# Optional Bevy-based viewer (kept behind a feature because it adds significant compile time).
+bevy = { version = "0.17", optional = true }
+bevy_sky_gradient = { version = "0.2.0", optional = true }
