@@ -1,0 +1,36 @@
+name = "Default Multi-Noise"
+description = "Default stacked noise terrain generation with continentalness, erosion, and peaks/valleys"
+seed = 42
+density_threshold = -0.2
+
+[continentalness]
+scale = 3.0
+octaves = 5
+lacunarity = 2.0
+gain = 0.5
+
+[erosion]
+scale = 8.0
+octaves = 4
+lacunarity = 2.0
+gain = 0.5
+
+[peaks_valleys]
+scale = 18.0
+octaves = 5
+lacunarity = 2.0
+gain = 0.5
+
+[weights]
+continentalness = 0.9
+peaks_valleys = 1.0
+erosion = 0.35
+
+[vertical]
+bias = 1.8
+min_y = -128.0
+max_y = 128.0
+
+[material_thresholds]
+stone_max = 32
+grass_max = 64

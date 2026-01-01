@@ -1,0 +1,36 @@
+name = "Rolling Hills"
+description = "Gentle rolling hills with smooth terrain"
+seed = 999
+density_threshold = -0.3
+
+[continentalness]
+scale = 2.0
+octaves = 4
+lacunarity = 2.0
+gain = 0.45
+
+[erosion]
+scale = 6.0
+octaves = 3
+lacunarity = 2.0
+gain = 0.4
+
+[peaks_valleys]
+scale = 10.0
+octaves = 3
+lacunarity = 2.0
+gain = 0.4
+
+[weights]
+continentalness = 1.0
+peaks_valleys = 0.6
+erosion = 0.5
+
+[vertical]
+bias = 1.2
+min_y = -128.0
+max_y = 128.0
+
+[material_thresholds]
+stone_max = 20
+grass_max = 50

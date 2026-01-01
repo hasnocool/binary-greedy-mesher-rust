@@ -1,4 +1,5 @@
 pub mod data;
+pub mod mapgen;
 pub mod mesher;
 pub mod misc;
 pub mod rendering;

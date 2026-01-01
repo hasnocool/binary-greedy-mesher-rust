@@ -1,0 +1,39 @@
+# layers_example.toml
+# Example config for noise_layers_viz.py
+
+seed = 42
+size = 256
+slice_y = 0.5
+
+[[layers]]
+name = "base_fbm"
+kind = "fbm"
+scale = 6.0
+octaves = 5
+lacunarity = 2.0
+gain = 0.5
+weight = 1.0
+seed_offset = 11
+display_cmap = "gray"
+
+[[layers]]
+name = "detail_fbm"
+kind = "fbm"
+scale = 18.0
+octaves = 4
+lacunarity = 2.0
+gain = 0.5
+weight = 0.35
+seed_offset = 23
+display_cmap = "magma"
+
+[[layers]]
+name = "ridges"
+kind = "ridged_fbm"
+scale = 22.0
+octaves = 5
+lacunarity = 2.0
+gain = 0.5
+weight = 0.8
+seed_offset = 37
+display_cmap = "coolwarm"

@@ -1,0 +1,36 @@
+name = "High Mountains"
+description = "Dramatic mountain terrain with extreme peaks and valleys"
+seed = 123
+density_threshold = -0.1
+
+[continentalness]
+scale = 4.0
+octaves = 6
+lacunarity = 2.0
+gain = 0.5
+
+[erosion]
+scale = 12.0
+octaves = 5
+lacunarity = 2.0
+gain = 0.5
+
+[peaks_valleys]
+scale = 24.0
+octaves = 7
+lacunarity = 2.2
+gain = 0.55
+
+[weights]
+continentalness = 0.8
+peaks_valleys = 1.5
+erosion = 0.2
+
+[vertical]
+bias = 2.2
+min_y = -128.0
+max_y = 128.0
+
+[material_thresholds]
+stone_max = 48
+grass_max = 80

@@ -3,12 +3,18 @@ name = "binary_greedy_mesher_demo_rs"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "mapgen_view"
+path = "src/bin/mapgen_view.rs"
+
 [dependencies]
 anyhow = "1"
 bytemuck = { version = "1", features = ["derive"] }
 glam = "0.29"
 glow = "0.16"
 rayon = "1"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
 
 # Window + OpenGL context (pure Rust, no GLFW dependency)
 winit = "0.30"

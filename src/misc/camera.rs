@@ -62,7 +62,7 @@ impl Camera {
         self.update_camera_vectors();
     }
 
-    fn update_camera_vectors(&mut self) {
+    pub fn update_camera_vectors(&mut self) {
         let yaw = self.yaw.to_radians();
         let pitch = self.pitch.to_radians();
 

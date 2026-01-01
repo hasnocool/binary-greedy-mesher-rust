@@ -1,0 +1,1 @@
+create a new github repo using the scripts in scripts\ and push the project files to my github repo
