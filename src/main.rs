@@ -225,10 +225,32 @@ fn main() -> Result<()> {
     let mut renderer = ChunkRenderer::new(&gl).context("create renderer")?;
 
     // --- Load level file ---
-    let level_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("..")
-        .join("levels")
-        .join(DEMO_LEVEL_FILE);
+    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let candidates = [
+        // Prefer a repo-local levels/ folder so the project runs after clone.
+        manifest_dir.join("levels").join(DEMO_LEVEL_FILE),
+        // Legacy layout: levels/ as a sibling of the repo folder.
+        manifest_dir.join("..").join("levels").join(DEMO_LEVEL_FILE),
+        // Fallback: current working directory (useful when launched elsewhere).
+        std::env::current_dir()?
+            .join("levels")
+            .join(DEMO_LEVEL_FILE),
+    ];
+
+    let level_path = candidates
+        .iter()
+        .find(|p| p.exists())
+        .cloned()
+        .with_context(|| {
+            let searched = candidates
+                .iter()
+                .map(|p| format!("  - {}", p.display()))
+                .collect::<Vec<_>>()
+                .join("\n");
+            format!(
+                "Could not find demo level file '{DEMO_LEVEL_FILE}'. Searched:\n{searched}"
+            )
+        })?;
 
     let mut level = LevelFile::default();
     level.load_from_file(&level_path)?;
